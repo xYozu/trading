@@ -13,7 +13,7 @@ lista_operazioni=[]
 trade_effettuati=0
 valori_finali =[]
 
-# creo una lista contenente i ticker di alcune delle migiori aziende americane 
+# creo una lista contenente i tickers di alcune delle migliori aziende americane 
 tickers = [ 'NVDA',  
     #'AAPL',
     #'GOOGL',
@@ -50,7 +50,7 @@ tickers = [ 'NVDA',
     #'HON', 'RTX', 'DE', 'NKE', 'LOW'
 
 ]
-# con un ciclo prendo i dataset dei prezzi dei vari titoli durante un range temporale
+# con un ciclo prendo i dataset dei prezzi dei vari titoli in un range temporale
 for ticker in tickers:
 
     print(f"Ticker:{ticker}") 
@@ -70,10 +70,11 @@ for ticker in tickers:
     
 
 
-# Optionally, save to a CSV file
+
     df.to_csv(f"{ticker}_rviscreener.csv")# creo un csv del dataset del ticker
     
-    for i in range(1, len(df)):# faccio un ciclo che iteri non più su i vari ticker ma sul dataset del ticker corrente
+# faccio un ciclo che iteri non più su i vari ticker ma sul dataset del ticker corrente
+    for i in range(1, len(df)):
         if i==len(df)-9:#mi assicuro di non andare outofbonds
             break
 
@@ -138,16 +139,16 @@ for ticker in tickers:
     #volumi
         volume=df['Volume'].iloc[i]# il volume è la quantità di azioni scambiate
 
-        if rvi_oggi14<20:# controllo se l'rvi del giorno ha un valore inferiore a 20, che identifica un valore di voltilita al ribasso, quindi teoricamente se il prezzo tende a scendere può esserci una continuazione del trendo o una inversione, io controllo se vi è una inversione, infatti compro il giorno in cui il titolo chiude con un valore di rvi sotto 20 e vendo alla chiusura del giorno dopo
+        if rvi_oggi14<20:# controllo se l'rvi del giorno ha un valore inferiore a 20, che identifica un valore di voltilita al ribasso(iper venduto), quindi teoricamente se il prezzo tende a scendere può esserci una continuazione del trendo o una inversione, io controllo se vi è una inversione, infatti compro il giorno in cui il titolo chiude con un valore di rvi sotto 20 e vendo alla chiusura del giorno dopo
                 
-                print(f"Date: {df.index[i].date()}, BUY")
+                print(f"Date: {df.index[i].date()}, BUY")#data del giorno in cui acquisto
                 
-                print(f"RVI oggi 14: {rvi_oggi14}")
+                print(f"RVI oggi 14: {rvi_oggi14}")#valore dell'rvi alla chiusura
 
                 print(f"comprato a: {close:.2f}")# faccio in modo che il mio prezzo di acquisto sia quello di chiusura di giornata
 
                 print(" ")
-                # stampo i vari risultati per vedere come varia durante i le giornate, in questo caso dopo una giornata, 2, 3...una settimana dopo
+                # stampo i vari risultati per vedere come variano le chiusure, in questo caso dopo una giornata, 2, 3...una settimana dopo
                 print(f"close_successivo: {close_successiva}, profitto: {(close_successiva-close)/close*100}%")
                 print(f"close_2: {close_2}, profitto: {(close_2-close)/close*100}%")
                 print(f"close_3: {close_3}, profitto: {(close_3-close)/close*100}%")
@@ -168,7 +169,7 @@ for ticker in tickers:
                 print(f"high_7: {high_7}, profitto: {(high_7-close)/close*100}%")
 
                 var1=(close_successiva-close)/close*100#creo la variabile var1 che ad ogni ciclo sarà il valore del guadagno o perdita su ho acquistato il giorno n e venduto il giorno n+1
-                trade={'date':df.index[i].date(), 'variazione':var1, 'ticker': ticker}# creo un dizionrio che tiene conto della data del trade, la variazione(gadagno perdit percentule) e il ticker della stock tradata
+                trade={'date':df.index[i].date(), 'variazione':var1, 'ticker': ticker}# creo un dizionrio che tiene conto della data del trade, la variazione(gadagno perdita percentule) e il ticker della stock tradata
                 lista_trade.append(trade)#aggiungo i dizionari in una lista
                         
                 trade_effettuati=trade_effettuati+1
@@ -179,7 +180,7 @@ lista_trade_ordinati= sorted(lista_trade, key=lambda x: x['date'])#ordino i dizi
 lista_trade_unici = []
 date_incontrate = set()
 
-for item in lista_trade_ordinati: #dopo aver ordinto la lista provvedo ad eliminare giorni in cui ho tradato più di un titolo
+for item in lista_trade_ordinati: #dopo aver ordinto la lista provvedo ad eliminare giorni in cui ho tradato più di un titolo, poichè io utilizzo tutto il budget per ogni trade posso fare un solo acquisto al giorno, quindi elimino le date in cui ho acquistato più volte lasciadone 1. NB: se ho fatto più acquisti in un giorno mi rimarra solo quello fatto con il ticker nella posizione più bassa nella lista
     data = item['date']
     if data not in date_incontrate:
         lista_trade_unici.append(item)
