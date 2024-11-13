@@ -1,5 +1,5 @@
 # Trading (questo è un esempio di alcuni script veloci che ho scritto)
-In questo spazio farò analisi veloci di dati riguardanti per lo più azioni delle più grandi aziende americane, l'obbiettivo è vedere se i soliti indicatori di analisi tecnica funzionano e cercare di 
+In questo spazio farò analisi veloci di dati riguardanti per lo più il prezzo delle azioni delle più grandi aziende americane, l'obbiettivo è vedere se i soliti indicatori di analisi tecnica funzionano e cercare di 
 utilizzarli combinati tra loro in modo tale da risultare più efficaci.
 Come Benchmark utilizzo l'andamento dell'indice Standard & Poor 500 del periodo analizzato, tali indicatori sono i più famosi e sono presenti nella libreria python TA-lib.
 
