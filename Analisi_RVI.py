@@ -59,7 +59,7 @@ for ticker in tickers:
     df_chiusura_adj= yf.download(ticker, start="2017-01-01", end="2019-12-30")
 
 
-    df[['Adj Close']]=df_chiusura_adj[['Adj Close']]  #poichè il primo dataset contiene i valori delle ciusure senza aggiustamenti come dividendi split ecc prendo un dataset con le chiusure aggiustate e faccio merge con il primo
+    df[['Adj Close']]=df_chiusura_adj[['Adj Close']]  #poichè il primo dataset contiene i valori delle chiusure senza aggiustamenti come dividendi split ecc prendo un dataset con le chiusure aggiustate e faccio merge con il primo
 
     df['RSI'] = talib.RSI(df['Adj Close'], timeperiod=14)#con la libreria talib e ta creo gli indicatori da testare, per maggiore informazini sull'idicatore leggere il README
     df['SMA'] = talib.SMA(df['RSI'], timeperiod=14)
@@ -71,7 +71,7 @@ for ticker in tickers:
 
 
 
-    df.to_csv(f"{ticker}_rviscreener.csv")# creo un csv del dataset del ticker
+    df.to_csv(f"{ticker}_rviscreener.csv")# creo un .csv del dataset del ticker
     
 # faccio un ciclo che iteri non più su i vari ticker ma sul dataset del ticker corrente
     for i in range(1, len(df)):
@@ -80,7 +80,7 @@ for ticker in tickers:
 
     # dal dataset creo le variabili  che mi servinno per vedere i prezzi di apertura, chiusura, massimi e minimi di giornata e dei giorni successivi
 
-    # RSI RVI  SMA
+    # RSI RVI  SMA, per la strategia utilizzo solo RVI, gli altri due indicatori anche se sono inseriti non li ho utilizzati per testare la strategia
 
         rvi_ieri2 = df['RVI_2'].iloc[i-1]
         rvi_oggi2 = df['RVI_2'].iloc[i]
@@ -118,7 +118,7 @@ for ticker in tickers:
         close_7 = df['Adj Close'].iloc[i+7]
 
     #massimi
-        high_successivo= df['High'].iloc[i+1]# ho inserito anche massimi, minimi e aperture per vedere AD OCCHIO cio che succedeva i giorni successivi e le varie oscillazioni del prezzo 
+        high_successivo= df['High'].iloc[i+1]# ho inserito anche massimi, minimi e aperture per vedere ad occhio ciò che succedeva nei giorni successivi (per magari una strategia futura) e le varie oscillazioni del prezzo 
         
         high_2 = df['High'].iloc[i+2]
         high_3 = df['High'].iloc[i+3]
@@ -139,7 +139,7 @@ for ticker in tickers:
     #volumi
         volume=df['Volume'].iloc[i]# il volume è la quantità di azioni scambiate
 
-        if rvi_oggi14<20:# controllo se l'rvi del giorno ha un valore inferiore a 20, che identifica un valore di voltilita al ribasso(iper venduto), quindi teoricamente se il prezzo tende a scendere può esserci una continuazione del trendo o una inversione, io controllo se vi è una inversione, infatti compro il giorno in cui il titolo chiude con un valore di rvi sotto 20 e vendo alla chiusura del giorno dopo
+        if rvi_oggi14<20:# controllo se l'rvi del giorno ha un valore inferiore a 20, che identifica un valore di voltilità al ribasso(iper venduto), quindi teoricamente se il prezzo tende a scendere può esserci una continuazione del trend o una inversione, io controllo se vi è una inversione, infatti compro il giorno in cui il titolo chiude con un valore di rvi sotto 20 e vendo alla chiusura del giorno dopo
                 
                 print(f"Date: {df.index[i].date()}, BUY")#data del giorno in cui acquisto
                 
@@ -148,7 +148,7 @@ for ticker in tickers:
                 print(f"comprato a: {close:.2f}")# faccio in modo che il mio prezzo di acquisto sia quello di chiusura di giornata
 
                 print(" ")
-                # stampo i vari risultati per vedere come variano le chiusure, in questo caso dopo una giornata, 2, 3...una settimana dopo
+                # stampo i vari risultati per vedere come variano le chiusure e quindi i possibili ritorni, in questo caso dopo una giornata, 2, 3...una settimana dopo
                 print(f"close_successivo: {close_successiva}, profitto: {(close_successiva-close)/close*100}%")
                 print(f"close_2: {close_2}, profitto: {(close_2-close)/close*100}%")
                 print(f"close_3: {close_3}, profitto: {(close_3-close)/close*100}%")
@@ -168,7 +168,7 @@ for ticker in tickers:
                 print(f"high_6: {high_6}, profitto: {(high_6-close)/close*100}%")
                 print(f"high_7: {high_7}, profitto: {(high_7-close)/close*100}%")
 
-                var1=(close_successiva-close)/close*100#creo la variabile var1 che ad ogni ciclo sarà il valore del guadagno o perdita su ho acquistato il giorno n e venduto il giorno n+1
+                var1=(close_successiva-close)/close*100#creo la variabile var1 che ad ogni ciclo sarà il valore del guadagno o perdita se ho acquistato il giorno n e venduto il giorno n+1
                 trade={'date':df.index[i].date(), 'variazione':var1, 'ticker': ticker}# creo un dizionrio che tiene conto della data del trade, la variazione(gadagno perdita percentule) e il ticker della stock tradata
                 lista_trade.append(trade)#aggiungo i dizionari in una lista
                         
@@ -180,7 +180,7 @@ lista_trade_ordinati= sorted(lista_trade, key=lambda x: x['date'])#ordino i dizi
 lista_trade_unici = []
 date_incontrate = set()
 
-for item in lista_trade_ordinati: #dopo aver ordinto la lista provvedo ad eliminare giorni in cui ho tradato più di un titolo, poichè io utilizzo tutto il budget per ogni trade posso fare un solo acquisto al giorno, quindi elimino le date in cui ho acquistato più volte lasciadone 1. NB: se ho fatto più acquisti in un giorno mi rimarra solo quello fatto con il ticker nella posizione più bassa nella lista
+for item in lista_trade_ordinati: #dopo aver ordinato la lista provvedo ad eliminare giorni in cui ho tradato più di un titolo, poichè io utilizzo tutto il budget per ogni trade posso fare un solo acquisto al giorno, quindi elimino le date in cui ho acquistato più volte lasciadone 1. NB: se ho fatto più acquisti in un giorno mi rimarrà solo quello fatto con il ticker posizionato prima nella lista
     data = item['date']
     if data not in date_incontrate:
         lista_trade_unici.append(item)
@@ -206,9 +206,9 @@ plt.xlabel("numero di trade")
 plt.ylabel("Valore Budget")
 plt.grid(False)
     
-# Mostra il grafico finale
+# Mostra il grafico finale, per compararlo con il banchmark utilizzo tradingview, successivamente penso di aggiungere l'andamento dell'S&P 500 così da compararlo direttamente nel grafico
 plt.show()
 
 #Conclusioni
-#in base ai test effettuati si dimostra che l'utilizzo del RVI non batte il mercato in maniera costante
+#in base ai test effettuati si dimostra che l'utilizzo del RVI non batte il mercato in maniera costante, è possibile copiare il codice e testare autonomamente i possibili risultati
 #
