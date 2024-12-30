@@ -19,7 +19,7 @@ Il sistema di trading proposto nel codice è basato sull'osservazione di eventua
 A seguito di una prima analisi, i risultati ottenuti indicavano buone possibilità di battere il benchmark. Pertanto, ho deciso di eseguire una serie di test aggiuntivi per verificare la robustezza e la validità del modello, cercando di evitare il rischio di overfitting. L'overfitting si verifica quando un modello si adatta troppo strettamente ai dati storici, compromettendo la sua capacità di generalizzare e fornire previsioni accurate su nuovi dati. Per contrastare questo fenomeno, ho prestato particolare attenzione a non rendere il modello troppo complesso, bilanciando la ricerca di performance con la necessità di mantenere una certa generalizzabilità. I test sono stati effettuati utilizzando diverse configurazioni e periodi di valutazione per confermare che i risultati fossero robusti e non frutto di un adattamento eccessivo ai dati passati.
 
 I risultati del benchmark sono i seguenti:
-Budget finale Benchmark = 375$
+Budget finale Benchmark = 375
 Volatilità Benchmark = 0.02627
 Sharpe Ratio Benchmark = 0.04952
 VaR Benchmark = 0.04137
