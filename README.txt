@@ -1,4 +1,8 @@
-In questo spazio farò analisi veloci di dati riguardanti per lo più il prezzo delle azioni delle più grandi aziende americane. L'obiettivo è vedere se i soliti indicatori di analisi tecnica funzionano e cercare di utilizzarli combinati tra loro in modo tale da risultare più efficaci. Se i risultati ottenuti da una prima analisi sono piuttosto buoni, cercherò di ottimizzarli e migliorarli nel tempo. Come benchmark utilizzo l'andamento dell'indice Standard & Poor's 500 del periodo analizzato. Tali indicatori sono i più famosi e sono presenti nella libreria Python TA-lib.
+In questo spazio farò analisi veloci di dati riguardanti per lo più il prezzo delle azioni delle più grandi aziende americane.
+L'obiettivo è vedere se i soliti indicatori di analisi tecnica funzionano e cercare di utilizzarli combinati tra loro in modo tale da risultare più efficaci. 
+Se i risultati ottenuti da una prima analisi sono piuttosto buoni, cercherò di ottimizzarli e migliorarli nel tempo.
+Come benchmark utilizzo l'andamento dell'indice Standard & Poor's 500 del periodo analizzato. 
+Tali indicatori sono i più famosi e sono presenti nella libreria Python TA-lib.
 
 "Analisi_RVI.py".
 In "Analisi_RVI" analizzo l'indicatore Relative Volatility Index. L'RVI misura la deviazione standard dei prezzi nel tempo, ovvero è un indicatore di volatilità dei prezzi in un determinato periodo di tempo (es: 14 periodi = volatilità negli ultimi 14 giorni). Se la volatilità è al rialzo, siamo in una situazione di "iper-comprato", viceversa in "iper-venduto".
@@ -16,7 +20,9 @@ Nel contesto di questo script, l'RSI viene calcolato su un periodo, e successiva
 
 Il sistema di trading proposto nel codice è basato sull'osservazione di eventuali inversioni della media dell'RSI. Quando viene rilevata una deviazione significativa o una inversione di tendenza rispetto alla media, il modello attiva un segnale di acquisto per l'asset, con una durata massima dell'operazione di una settimana.
 
-A seguito di una prima analisi, i risultati ottenuti indicavano buone possibilità di battere il benchmark. Pertanto, ho deciso di eseguire una serie di test aggiuntivi per verificare la robustezza e la validità del modello, cercando di evitare il rischio di overfitting. L'overfitting si verifica quando un modello si adatta troppo strettamente ai dati storici, compromettendo la sua capacità di generalizzare e fornire previsioni accurate su nuovi dati. Per contrastare questo fenomeno, ho prestato particolare attenzione a non rendere il modello troppo complesso, bilanciando la ricerca di performance con la necessità di mantenere una certa generalizzabilità. I test sono stati effettuati utilizzando diverse configurazioni e periodi di valutazione per confermare che i risultati fossero robusti e non frutto di un adattamento eccessivo ai dati passati.
+A seguito di una prima analisi, i risultati ottenuti indicavano buone possibilità di battere il benchmark.
+Pertanto, ho deciso di eseguire una serie di test aggiuntivi per verificare la robustezza e la validità del modello, cercando di evitare il rischio di overfitting. L'overfitting si verifica quando un modello si adatta troppo strettamente ai dati storici, compromettendo la sua capacità di generalizzare e fornire previsioni accurate su nuovi dati.
+Per contrastare questo fenomeno, ho prestato particolare attenzione a non rendere il modello troppo complesso, bilanciando la ricerca di performance con la necessità di mantenere una certa generalizzabilità. I test sono stati effettuati utilizzando diverse configurazioni e periodi di valutazione per confermare che i risultati fossero robusti e non frutto di un adattamento eccessivo ai dati passati.
 
 budget iniziale=100
 
