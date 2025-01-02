@@ -23,7 +23,7 @@ Pertanto, ho deciso di eseguire una serie di test aggiuntivi per verificare la r
 
 budget iniziale=100, risk_free_rate= 0.03, alpha= 0.05, inizio_test=2007, fine_test=2022, 
 
-I risultati del benchmark sono i seguenti:
+I risultati del benchmark(S&P 500) sono i seguenti:
 Budget finale Benchmark = 375
 Volatilità Benchmark = 0.02627
 Sharpe Ratio Benchmark = 0.04952
