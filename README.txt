@@ -60,12 +60,6 @@ Sharpe Ratio strategia = 0.07359
 VaR strategia = 0.04085
 
 
-Risultati test #5:(RSI=15 periodi, SMA=15 periodi, stop_loss= -5%, take_profit=25%) 
-Budget finale strategia = 533
-Volatilità strategia = 0.02618
-Sharpe Ratio strategia = 0.07359
-VaR strategia = 0.04085
-
 
 
 
