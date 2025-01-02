@@ -9,7 +9,7 @@ from collections import defaultdict
 import seaborn as sns
 from scipy.stats import pearsonr
 
-#creo le liste che alla fine del progrmamma mi serviranno per contenere i dati da stampare e rappresentare
+#creo le liste che alla fine del programma mi serviranno per contenere i dati da stampare e rappresentare
 lista_date= []
 lista_trade=[]
 lista_budget_1=[]
@@ -52,7 +52,7 @@ for ticker in tickers:
     df['RSI'] = talib.RSI(df['Adj Close'], timeperiod=periodo)#con talib e ta creo gli indicatori da testare, per maggiore informazioni sull'idicatore leggere il README
     df['SMA'] = talib.SMA(df['RSI'], timeperiod=periodo)
     
-    df['RVI_2'] = ta.rvi(df['Adj Close'], length=2, ma_length=2)#calcolo l'rvi di diversi periodi
+    df['RVI_2'] = ta.rvi(df['Adj Close'], length=2, ma_length=2)
     df['RVI_7'] = ta.rvi(df['Adj Close'], length=7, ma_length=7)
     df['RVI_14'] = ta.rvi(df['Adj Close'], length=14, ma_length=14)
     df['Monthly_returns'] = df['Close'].pct_change()
@@ -66,9 +66,8 @@ for ticker in tickers:
         if i==len(df)-4:#mi assicuro di non andare outofbonds
             break
 
-    # dal dataset creo le variabili  che mi servinno per vedere i prezzi di apertura, chiusura, massimi e minimi di giornata e dei giorni successivi
+    # dal dataset creo le variabili  che mi servinno per vedere i prezzi di apertura, chiusura, massimi e minimi 
     #
-
 
     # RSI RVI  SMA
 
@@ -95,7 +94,7 @@ for ticker in tickers:
         close_meno2 = df['Adj Close'].iloc[i-2]
         close_precedente = df['Adj Close'].iloc[i-1]
         close = df['Adj Close'].iloc[i]# prezzo al quale io compro l'azione
-        close_successiva = df['Adj Close'].iloc[i+1]# prezzo di chiusura del giorno successivo (close-close_successiva) sarà il mio guadagno (close_successiva-close)/close*100 sarà il mio guadagno in percentuale
+        close_successiva = df['Adj Close'].iloc[i+1]# prezzo di chiusura successivo (close-close_successiva) sarà il mio guadagno (close_successiva-close)/close*100 sarà il mio guadagno in percentuale
             
         close_2 = df['Adj Close'].iloc[i+2]
         close_3 = df['Adj Close'].iloc[i+3]
@@ -103,7 +102,7 @@ for ticker in tickers:
     #massimi
         high_precedente= df['High'].iloc[i-1]
         high=df['High'].iloc[i]
-        high_successivo= df['High'].iloc[i+1]# ho inserito anche massimi, minimi e aperture per vedere AD OCCHIO cio che succedeva i giorni successivi e le varie oscillazioni del prezzo 
+        high_successivo= df['High'].iloc[i+1]# ho inserito anche massimi, minimi e aperture per vedere AD OCCHIO ciò che succedeva i giorni successivi e le varie oscillazioni del prezzo 
         
         high_2 = df['High'].iloc[i+2]
         high_3 = df['High'].iloc[i+3]
@@ -200,7 +199,7 @@ for ticker in tickers:
             
 
             lista_media_variazioni.append(var1)
-            if low1<-0.05:#utilizzo il -x% come stoploss, ovvero aggiungo nella lista -x%
+            if low1<-0.05:#utilizzo il -x% come stoploss, ovvero aggiungo nella lista -x% se si verifica che il low price è stato pari o inferiore
                 trade={'date':df.index[i].date(), 'variazione':-0.05, 'Alla apertura':open1, 'High_raggiunto':high1, 'Low_raggiunto':low1, 'ticker': ticker,}
                 lista_trade.append(trade)
             elif high1>=0.25:
@@ -299,7 +298,7 @@ plt.grid(False)
 plt.show()
 
 
-def mostra_correlazione(dati):#mi serviva per vedere se vi era una correlazione con le apertura, considerando che io mi aspetto una inversione e un aumento del prezzo volevo vedere se una apertura positiva si concludesse con una chiusura positiva o un max per poi riscendere
+def mostra_correlazione(dati):#mi serviva per vedere se vi era una correlazione con le apertura, considerando che io mi aspetto una inversione e un aumento del prezzo volevo vedere se una apertura positiva si concludesse con una chiusura positiva o un max per poi riscendere, i risultati mostrano una correlazione debole
     
     aperture = [d['Alla apertura'] for d in dati if 'Alla apertura' in d]
     high_raggiunto = [d['High_raggiunto'] for d in dati if 'High_raggiunto' in d]
