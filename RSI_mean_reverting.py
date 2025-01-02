@@ -20,9 +20,11 @@ trade_effettuati=0
 valori_finali =[]
 lista_media_variazioni=[]
 numero_di_trade_effettuati=0
-data_inizio_test="2012-01-01"
+#parametri dei test
+data_inizio_test="2007-01-01"
 data_fine_test="2022-12-31"
 intervallo="1wk"
+periodo=10
 
 # creo una lista contenente i ticker di alcune delle migliori aziende
 tickers = [ 
@@ -30,8 +32,8 @@ tickers = [
     'NVDA',  
     'AAPL','GOOGL','AMZN', 'KO','BAC','MSFT', 'T','F','PFE',
     #'TSLA' ,
-    'NFLX','JNJ', 'PG','V', 'MA','PEP', 'DIS', 'MCD', 'INTC',  'XOM','CVX', 'MMM','CSCO','IBM','WMT',  'ORCL','ADBE','TXN', 'COST', 'TGT', 'MDT', 'LMT','AVGO', 'AMD', 'CRM',
-    'INTU', 'AMAT','MSCI', 'TMO','GILD', 'UNH', 'CI', 'ELV', 'ISRG','ABT', 'CME', 'SCHW', 'BKNG', 'SPGI','MO', 'PM', 'SBUX',  'UPS','HON', 'RTX', 'DE', 'NKE', 'LOW',
+    'NFLX','JNJ', 'PG','V', 'MA','PEP', 'DIS', 'MCD', 'INTC',  'XOM','CVX', 'MMM','CSCO','IBM','WMT', 'ORCL','ADBE','TXN', 'COST', 'TGT', 'MDT', 'LMT','AVGO', 'AMD', 'CRM',
+    'INTU', 'AMAT','MSCI', 'TMO','GILD', 'UNH', 'CI', 'ELV', 'ISRG','ABT', 'CME', 'SCHW', 'BKNG', 'SPGI','MO', 'PM', 'SBUX', 'UPS','HON', 'RTX', 'DE', 'NKE', 'LOW',
     #europee 
     'CRH', 'ROG', 'DGE', 'NOV', 'DCC','SAP', 'BA', 'AZN', 'RMS', 'SAN',  
 
@@ -47,8 +49,8 @@ for ticker in tickers:
 
     df[['Adj Close']]=df_chiusura_adj[['Adj Close']]  #"Poiché il primo dataset contiene i valori di chiusura non aggiustati (es. dividendi, split), prendo un dataset con le chiusure aggiustate e lo unisco con il primo
 
-    df['RSI'] = talib.RSI(df['Adj Close'], timeperiod=12)#con talib e ta creo gli indicatori da testare, per maggiore informazioni sull'idicatore leggere il README
-    df['SMA'] = talib.SMA(df['RSI'], timeperiod=12)
+    df['RSI'] = talib.RSI(df['Adj Close'], timeperiod=periodo)#con talib e ta creo gli indicatori da testare, per maggiore informazioni sull'idicatore leggere il README
+    df['SMA'] = talib.SMA(df['RSI'], timeperiod=periodo)
     
     df['RVI_2'] = ta.rvi(df['Adj Close'], length=2, ma_length=2)#calcolo l'rvi di diversi periodi
     df['RVI_7'] = ta.rvi(df['Adj Close'], length=7, ma_length=7)
@@ -125,7 +127,7 @@ for ticker in tickers:
         volume_2_successivo = df['Volume'].iloc[i+2]
         volume_3_successivo = df['Volume'].iloc[i+3]
 
-        if sma_attuale>sma_precedente and sma_2_volte_prima>sma_precedente:#controllo cosa succede quando ho una inversione della mediaa dello RSI
+        if sma_attuale>sma_precedente and sma_2_volte_prima>sma_precedente:#controllo cosa succede quando ho una inversione della media dello RSI
                
             data=df.index[i].date()
             print(f"Date: {df.index[i].date()}, BUY")
@@ -198,8 +200,8 @@ for ticker in tickers:
             
 
             lista_media_variazioni.append(var1)
-            if low1<-0.25:
-                trade={'date':df.index[i].date(), 'variazione':-0.25, 'Alla apertura':open1, 'High_raggiunto':high1, 'Low_raggiunto':low1, 'ticker': ticker,}
+            if low1<-0.05:#utilizzo il -x% come stoploss, ovvero aggiungo nella lista -x%
+                trade={'date':df.index[i].date(), 'variazione':-0.05, 'Alla apertura':open1, 'High_raggiunto':high1, 'Low_raggiunto':low1, 'ticker': ticker,}
                 lista_trade.append(trade)
             elif high1>=0.25:
                 trade={'date':df.index[i].date(), 'variazione':0.25, 'Alla apertura':open1, 'High_raggiunto':high1, 'Low_raggiunto':low1, 'ticker': ticker,}
@@ -208,7 +210,7 @@ for ticker in tickers:
                 trade={'date':df.index[i].date(), 'variazione':var1, 'Alla apertura':open1, 'High_raggiunto':high1, 'Low_raggiunto':low1, 'ticker': ticker,}
                 lista_trade.append(trade)#aggiungo i dizionari in una lista
 
-            #creo le liste per vedere i massimi e i minimi
+            #creo delle liste per vedere i massimi e i minimi
             if var1<0:
                 print(f"low fail: {( low_successivo-close_successiva)/close_successiva:.2f}%")
                 lista_differenze_fail.append(( low_successivo-close)/close )
@@ -272,7 +274,7 @@ def grafico_benchmark(budget=100, ticker="SPY", inizio=data_inizio_test, fine=da
     benchmark_chiusura_adj= yf.download(ticker, start=data_inizio_test, end=data_fine_test, interval=intervallo)
     benchmark[['Adj Close']]=benchmark_chiusura_adj[['Adj Close']] 
     
-    benchmark['Rendimento'] = benchmark['Adj Close'].pct_change()  # Calcoliamo il rendimento mensile 
+    benchmark['Rendimento'] = benchmark['Adj Close'].pct_change()  # Calcolo il rendimento 
     benchmark['Budget'] = budget * (1 + benchmark['Rendimento']).cumprod()
     #benchmark.to_csv(f"controllo_dati_funzione_benchmark.csv")
     
@@ -331,29 +333,50 @@ mostra_correlazione(lista_trade_ordinati)
 
 def risk_calculator(returns_1, returns_2, risk_free_rate=0.03, alpha=0.05):# calcolo il rischio storico della strategia e del benchmrk per compararli
     
-    def annualized_volatility(returns):
+    def volatility(returns):
         dev_std=np.std(returns)
         return  dev_std
 
     def sharpe_ratio(returns, risk_free_rate):
         mean_return = np.mean(returns) 
-        volatility = annualized_volatility(returns)
+        volatilita = volatility(returns)
         
-        sharpe=(mean_return - (risk_free_rate)/48) / volatility
+        sharpe=(mean_return - (risk_free_rate)/48) / volatilita
         return sharpe
 
     def value_at_risk(returns, alpha):
         value_at_risk= -np.percentile(returns, 100 * alpha)
         return value_at_risk
+    def max_drawdown(prices):
+    
+        peak = prices[0]  # il picco iniziale
+        max_dd = 0         # massimo drawdown inizializzato a 0
+        for price in prices:
+            if price > peak:
+                peak = price  # nuovo picco
+            drawdown = (peak - price) / peak  # calcolo del drawdown
+            max_dd = max(max_dd, drawdown)  # aggiorno il massimo drawdown se necessario
+        return max_dd
 
-    volatility_1=annualized_volatility(returns_1)
-    volatility_2=annualized_volatility(returns_2)
+    volatility_1=volatility(returns_1)
+    volatility_2=volatility(returns_2)
     sharpe_1=sharpe_ratio(returns_1, risk_free_rate)
     sharpe_2=sharpe_ratio(returns_2, risk_free_rate)
     VaR_benchmark=value_at_risk(returns_1, alpha)
     VaR_strategy=value_at_risk(returns_2, alpha)
+    max_drawdown_benchmark=max_drawdown(returns_1)
+    max_drawdown_strategia=max_drawdown(returns_2)
 
-    risultati_rischio={ 'volatilità_benchmark':volatility_1, 'volatilità_strategia':volatility_2, 'sharpe_rateo_benchmark':sharpe_1, 'sharpe_rateo_strategia':sharpe_2, 'VaR_benchmark':VaR_benchmark, 'VaR_strategy':VaR_strategy}
+    risultati_rischio={ 'volatilità_benchmark':volatility_1,
+                        'volatilità_strategia':volatility_2, 
+                        'sharpe_rateo_benchmark':sharpe_1, 
+                        'sharpe_rateo_strategia':sharpe_2, 
+                        'VaR_benchmark':VaR_benchmark, 
+                        'VaR_strategy':VaR_strategy,
+                        'max_drawdown_benchmark': max_drawdown_benchmark,
+                        'max_drawdown_strategia': max_drawdown_strategia
+
+                        }
 
     return risultati_rischio
 
@@ -366,7 +389,7 @@ print(f"quantità variazioni strategia {len(strategy_returns)}")
 print(f"quantità variazioni benchmark {len(risultati_benchmark)}")
 print(f"risultati analisi del rischio {risultati_rischio} ")
 
-#analizzo i drawdown massimi ottenuti durante l'esposizione,
+#analizzo i drawdown massimi ottenuti durante l'esposizione
 #fail
 plt.plot(lista_differenze_fail, marker='x', color='b')
 plt.axhline(y=-0.05, color='r', linestyle='--', label='y = -5')    
@@ -385,4 +408,4 @@ plt.ylabel("Percentuale drawdown")
 plt.grid(False)
 plt.show()
 
-#come è possibile notare superato il 5% di loss quasi mai il titolo ha chiuso successivmente in positivo
+#come è possibile notare superato il 5% di loss quasi mai il titolo ha chiuso successivmente in positivo, potrebbe essere un buon segnale di stoploss
