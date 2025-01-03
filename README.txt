@@ -26,7 +26,7 @@ budget iniziale=100, risk_free_rate= 0.03, alpha= 0.05, inizio_test=2007, fine_t
 I risultati del benchmark(Nasdaq 100) sono i seguenti:
 Budget finale Benchmark = 610
 Volatilità Benchmark = 0.02860
-Sharpe Ratio Benchmark = 0.06860
+Sharpe Ratio Benchmark = 0.05518
 VaR Benchmark = 0.04456
 max_drawdown_benchmark 0.51907
 
