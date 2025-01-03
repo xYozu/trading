@@ -23,39 +23,21 @@ Pertanto, ho deciso di eseguire una serie di test aggiuntivi per verificare la r
 
 budget iniziale=100, risk_free_rate= 0.03, alpha= 0.05, inizio_test=2007, fine_test=2022, 
 
-I risultati del benchmark(S&P 500) sono i seguenti:
-Budget finale Benchmark = 375
-Volatilità Benchmark = 0.02627
-Sharpe Ratio Benchmark = 0.04952
-VaR Benchmark = 0.04137
+I risultati del benchmark(Nasdaq 100) sono i seguenti:
+Budget finale Benchmark = 610
+Volatilità Benchmark = 0.02860
+Sharpe Ratio Benchmark = 0.06860
+VaR Benchmark = 0.04456
+max_drawdown_benchmark 0.51907
 
 
-Risultati test #1:(RSI=10 periodi, SMA=10 periodi, stop_loss= -10%, take_profit=25%) 
-Budget finale strategia = 652
-Volatilità strategia = 0.02993
-Sharpe Ratio strategia = 0.08099
-VaR strategia = 0.04500
+Risultati test #1:(RSI=10 periodi, SMA=10 periodi, stop_loss= -25%, take_profit=25%) 
+Budget finale strategia = 479
+Volatilità strategia = 0.02970
+Sharpe Ratio strategia = 0.06632
+VaR strategia = 0.04285
+Max drawdown strategia: 0.4719
 
-
-Risultati test #2:(RSI=10 periodi, SMA=10 periodi, stop_loss= -5%, take_profit=25%) 
-Budget finale strategia = 623
-Volatilità strategia = 0.02836
-Sharpe Ratio strategia = 0.08157
-VaR strategia = 0.04275
-
-
-Risultati test #3:(RSI=5 periodi, SMA=5 periodi, stop_loss= -10%, take_profit=25%) 
-Budget finale strategia = 362
-Volatilità strategia = 0.02851
-Sharpe Ratio strategia = 0.05196
-VaR strategia = 0.04700
-
-
-Risultati test #4:(RSI=5 periodi, SMA=5 periodi, stop_loss= -5%, take_profit=25%) 
-Budget finale strategia = 533
-Volatilità strategia = 0.02618
-Sharpe Ratio strategia = 0.07359
-VaR strategia = 0.04085
 
 
 
