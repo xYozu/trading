@@ -33,13 +33,17 @@ max_drawdown_benchmark 0.51907
 
 Esempio risultato test :(RSI=10 periodi, SMA=10 periodi, stop_loss= -25%, take_profit=25%) 
 Budget finale strategia = 479
-Volatilità strategia = 0.02970
-Sharpe Ratio strategia = 0.06632
+Volatilità strategia = 0.02971
+Sharpe Ratio strategia = 0.05335
 VaR strategia = 0.04285
 Max drawdown strategia: 0.4719
 
-Questo esempio mostra come la strategia risulta meno performante rispetto al benchmark, tuttavia mostra una riduzione del rischio che però potrebbe essere causata, ad esempio, dal fatto che i titoli esaminati sono diversi da quelli presenti nell'indice ( praticamente ho fatto stock picking ).
-Successivamente provvederò a testare la strategia su azioni presenti nell'indice durante l'intervallo temporale in esame, inoltre devo testare meglio i risultati ottenuti, in quanto mi sembra strano che una volatilità maggiore e un ritorno inferiore porti ad uno sharpe migliore.
+Questo esempio mostra come la strategia risulta meno performante rispetto al benchmark, tuttavia mostra una riduzione del rischio che però potrebbe essere causata, ad esempio, dal fatto che i titoli esaminati sono diversi da quelli presenti nell'indice ( praticamente avrei fatto stock picking ).
+Le modifiche da apportare sono alla lista delle stock, inoltre voglio modificare lo stoploss, in modo tale da ridurre ulteriormente il rischio, infatti come mostrano gli ultimi due grafici, superato il minimo del 5% quasi mai il titolo tradato ha chiuso la settimana in positivo.
+
+
+
+
 
 
 
