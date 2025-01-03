@@ -9,28 +9,33 @@ from collections import defaultdict
 import seaborn as sns
 from scipy.stats import pearsonr
 
-#creo le liste che alla fine del programma mi serviranno per contenere i dati da stampare e rappresentare
+#creo le liste che alla fine del progrmamma mi serviranno per contenere i dati da stampare e rappresentare
 lista_date= []
 lista_trade=[]
 lista_budget_1=[]
-budget=100
 lista_differenze_fail=[]
 lista_differenze_gain=[]
 trade_effettuati=0
 valori_finali =[]
 lista_media_variazioni=[]
 numero_di_trade_effettuati=0
+
 #parametri dei test
+budget=100
+
 data_inizio_test="2007-01-01"
 data_fine_test="2022-12-31"
 intervallo="1wk"
-periodo=10
+
+periodo= 15
+stop_loss= -0.25
+take_profit= 0.25
 
 # creo una lista contenente i ticker di alcune delle migliori aziende
 tickers = [ 
     #americane
     'NVDA',  
-    'AAPL','GOOGL','AMZN', 'KO','BAC','MSFT', 'T','F','PFE',
+    'AAPL','GOOGL','AMZN', 'KO','BAC','MSFT', 'T','F','PFE', 'JPM', 'GE', 'WFC', 'VZ', 'MRK', 'HD', 'PYPL', 'LLY',
     #'TSLA' ,
     'NFLX','JNJ', 'PG','V', 'MA','PEP', 'DIS', 'MCD', 'INTC',  'XOM','CVX', 'MMM','CSCO','IBM','WMT', 'ORCL','ADBE','TXN', 'COST', 'TGT', 'MDT', 'LMT','AVGO', 'AMD', 'CRM',
     'INTU', 'AMAT','MSCI', 'TMO','GILD', 'UNH', 'CI', 'ELV', 'ISRG','ABT', 'CME', 'SCHW', 'BKNG', 'SPGI','MO', 'PM', 'SBUX', 'UPS','HON', 'RTX', 'DE', 'NKE', 'LOW',
@@ -52,7 +57,7 @@ for ticker in tickers:
     df['RSI'] = talib.RSI(df['Adj Close'], timeperiod=periodo)#con talib e ta creo gli indicatori da testare, per maggiore informazioni sull'idicatore leggere il README
     df['SMA'] = talib.SMA(df['RSI'], timeperiod=periodo)
     
-    df['RVI_2'] = ta.rvi(df['Adj Close'], length=2, ma_length=2)
+    df['RVI_2'] = ta.rvi(df['Adj Close'], length=2, ma_length=2)#calcolo l'rvi di diversi periodi
     df['RVI_7'] = ta.rvi(df['Adj Close'], length=7, ma_length=7)
     df['RVI_14'] = ta.rvi(df['Adj Close'], length=14, ma_length=14)
     df['Monthly_returns'] = df['Close'].pct_change()
@@ -66,8 +71,9 @@ for ticker in tickers:
         if i==len(df)-4:#mi assicuro di non andare outofbonds
             break
 
-    # dal dataset creo le variabili  che mi servinno per vedere i prezzi di apertura, chiusura, massimi e minimi 
+    # dal dataset creo le variabili  che mi servinno per vedere i prezzi di apertura, chiusura, massimi e minimi di giornata e dei giorni successivi
     #
+
 
     # RSI RVI  SMA
 
@@ -94,7 +100,7 @@ for ticker in tickers:
         close_meno2 = df['Adj Close'].iloc[i-2]
         close_precedente = df['Adj Close'].iloc[i-1]
         close = df['Adj Close'].iloc[i]# prezzo al quale io compro l'azione
-        close_successiva = df['Adj Close'].iloc[i+1]# prezzo di chiusura successivo (close-close_successiva) sarà il mio guadagno (close_successiva-close)/close*100 sarà il mio guadagno in percentuale
+        close_successiva = df['Adj Close'].iloc[i+1]# prezzo di chiusura del giorno successivo (close-close_successiva) sarà il mio guadagno (close_successiva-close)/close*100 sarà il mio guadagno in percentuale
             
         close_2 = df['Adj Close'].iloc[i+2]
         close_3 = df['Adj Close'].iloc[i+3]
@@ -102,7 +108,7 @@ for ticker in tickers:
     #massimi
         high_precedente= df['High'].iloc[i-1]
         high=df['High'].iloc[i]
-        high_successivo= df['High'].iloc[i+1]# ho inserito anche massimi, minimi e aperture per vedere AD OCCHIO ciò che succedeva i giorni successivi e le varie oscillazioni del prezzo 
+        high_successivo= df['High'].iloc[i+1]# ho inserito anche massimi, minimi e aperture per vedere AD OCCHIO cio che succedeva i giorni successivi e le varie oscillazioni del prezzo 
         
         high_2 = df['High'].iloc[i+2]
         high_3 = df['High'].iloc[i+3]
@@ -199,11 +205,11 @@ for ticker in tickers:
             
 
             lista_media_variazioni.append(var1)
-            if low1<-0.05:#utilizzo il -x% come stoploss, ovvero aggiungo nella lista -x% se si verifica che il low price è stato pari o inferiore
-                trade={'date':df.index[i].date(), 'variazione':-0.05, 'Alla apertura':open1, 'High_raggiunto':high1, 'Low_raggiunto':low1, 'ticker': ticker,}
+            if low1<stop_loss:#utilizzo il -x% come stoploss, ovvero aggiungo nella lista -x%
+                trade={'date':df.index[i].date(), 'variazione':stop_loss, 'Alla apertura':open1, 'High_raggiunto':high1, 'Low_raggiunto':low1, 'ticker': ticker,}
                 lista_trade.append(trade)
-            elif high1>=0.25:
-                trade={'date':df.index[i].date(), 'variazione':0.25, 'Alla apertura':open1, 'High_raggiunto':high1, 'Low_raggiunto':low1, 'ticker': ticker,}
+            elif high1>=take_profit:
+                trade={'date':df.index[i].date(), 'variazione':take_profit, 'Alla apertura':open1, 'High_raggiunto':high1, 'Low_raggiunto':low1, 'ticker': ticker,}
                 lista_trade.append(trade)
             else:
                 trade={'date':df.index[i].date(), 'variazione':var1, 'Alla apertura':open1, 'High_raggiunto':high1, 'Low_raggiunto':low1, 'ticker': ticker,}
@@ -260,7 +266,7 @@ print(f"trade totali  {numero_di_trade_effettuati}")
 
 
 #con questa funzione controllo come si è comportato un benchmark nello stesso arco temporale
-def grafico_benchmark(budget=100, ticker="SPY", inizio=data_inizio_test, fine=data_fine_test ): #NASDAQ-100 (^NDX)
+def grafico_benchmark(budget=100, ticker="^NDX", inizio=data_inizio_test, fine=data_fine_test ): #NASDAQ-100 (^NDX)
     #iShares MSCI ACWI ETF (ACWI)      
     #iShares MSCI World ETF (URTH)
     #SPDR S&P 500 ETF (SPY)
@@ -298,7 +304,7 @@ plt.grid(False)
 plt.show()
 
 
-def mostra_correlazione(dati):#mi serviva per vedere se vi era una correlazione con le apertura, considerando che io mi aspetto una inversione e un aumento del prezzo volevo vedere se una apertura positiva si concludesse con una chiusura positiva o un max per poi riscendere, i risultati mostrano una correlazione debole
+def mostra_correlazione(dati):#mi serviva per vedere se vi era una correlazione con le apertura, considerando che io mi aspetto una inversione e un aumento del prezzo volevo vedere se una apertura positiva si concludesse con una chiusura positiva o un max per poi riscendere
     
     aperture = [d['Alla apertura'] for d in dati if 'Alla apertura' in d]
     high_raggiunto = [d['High_raggiunto'] for d in dati if 'High_raggiunto' in d]
@@ -346,16 +352,28 @@ def risk_calculator(returns_1, returns_2, risk_free_rate=0.03, alpha=0.05):# cal
     def value_at_risk(returns, alpha):
         value_at_risk= -np.percentile(returns, 100 * alpha)
         return value_at_risk
-    def max_drawdown(prices):
+
+    def max_drawdown(rendimenti):
+        
+        capitale_iniziale = 100
+        valori_portafoglio = [capitale_iniziale]
     
-        peak = prices[0]  # il picco iniziale
-        max_dd = 0         # massimo drawdown inizializzato a 0
-        for price in prices:
-            if price > peak:
-                peak = price  # nuovo picco
-            drawdown = (peak - price) / peak  # calcolo del drawdown
+        
+        for rendimento in rendimenti:
+            valore_attuale = valori_portafoglio[-1] * (1 + rendimento)
+            valori_portafoglio.append(valore_attuale)
+    
+        # Calcolare il massimo drawdown
+        peak = valori_portafoglio[0]  # il picco iniziale
+        max_dd = 0  # massimo drawdown inizializzato a 0
+    
+        for valore in valori_portafoglio:
+            if valore > peak:
+                peak = valore  # nuovo picco
+            drawdown = (peak - valore) / peak  # calcolo del drawdown
             max_dd = max(max_dd, drawdown)  # aggiorno il massimo drawdown se necessario
-        return max_dd
+    
+        return max_dd # ritorniamo il max drawdown 
 
     volatility_1=volatility(returns_1)
     volatility_2=volatility(returns_2)
