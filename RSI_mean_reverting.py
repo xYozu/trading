@@ -27,7 +27,7 @@ data_inizio_test="2007-01-01"
 data_fine_test="2022-12-31"
 intervallo="1wk"
 
-periodo= 15
+periodo= 10
 stop_loss= -0.25
 take_profit= 0.25
 
@@ -339,18 +339,26 @@ mostra_correlazione(lista_trade_ordinati)
 def risk_calculator(returns_1, returns_2, risk_free_rate=0.03, alpha=0.05):# calcolo il rischio storico della strategia e del benchmrk per compararli
     
     def volatility(returns):
+
         dev_std=np.std(returns)
+
         return  dev_std
 
+
     def sharpe_ratio(returns, risk_free_rate):
-        mean_return = np.mean(returns) 
+
+        rendimento_settimanale_medio= np.mean(returns) 
         volatilita = volatility(returns)
-        
-        sharpe=(mean_return - (risk_free_rate)/48) / volatilita
+        rendimento_annuo = (1 + rendimento_settimanale_medio)**52 - 1
+        volatilita_annua = volatilita * np.sqrt(52)
+        sharpe=(rendimento_annuo - risk_free_rate )/ volatilita_annua
+
         return sharpe
 
     def value_at_risk(returns, alpha):
+
         value_at_risk= -np.percentile(returns, 100 * alpha)
+
         return value_at_risk
 
     def max_drawdown(rendimenti):
@@ -358,7 +366,6 @@ def risk_calculator(returns_1, returns_2, risk_free_rate=0.03, alpha=0.05):# cal
         capitale_iniziale = 100
         valori_portafoglio = [capitale_iniziale]
     
-        
         for rendimento in rendimenti:
             valore_attuale = valori_portafoglio[-1] * (1 + rendimento)
             valori_portafoglio.append(valore_attuale)
