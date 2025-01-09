@@ -28,18 +28,18 @@ I risultati del benchmark(Nasdaq 100) sono i seguenti:
 Budget finale Benchmark = 630
 Volatilità Benchmark = 0.02824
 Sharpe Ratio Benchmark = 0.52806
-VaR Benchmark = -0.04257
+VaR Benchmark = -0.04454
 Max drawdown benchmark= -0.51907
-Expected shortfall benchmark: -0.06158
+Expected shortfall benchmark: -0.06483
 
 Esempio risultato test :(RSI=10 periodi, SMA=10 periodi, stop_loss= -25%, take_profit=25%) 
 
 Budget finale strategia = 1810
 Volatilità strategia = 0.03240
 Sharpe Ratio strategia = 0.67133
-VaR strategia = -0.04996
+VaR strategia = -0.047
 Max drawdown strategia: -0.52238
-Expected shortfall strategia: -0.07424
+Expected shortfall strategia: -0.06926
 
 Questo esempio evidenzia come la strategia abbia ottenuto performances superiori rispetto al benchmark, ma è probabile che ciò dipenda dal fatto che i titoli analizzati 
 sono cresciuti costantemente dal 2006 ad oggi, e difficilmente sarebbero stati selezionati per la strategia sin dal 2006, poiché non possedevano una qualità tale da
@@ -54,18 +54,18 @@ I risultati del benchmark(Nasdaq 100):
 Budget finale Benchmark = 464
 Volatilità Benchmark = 0.02582
 Sharpe Ratio Benchmark = 0.74979
-VaR Benchmark = -0.04086
+VaR Benchmark = -0.03884
 Max drawdown benchmark= -0.35486
-Expected shortfall benchmark: -0.06042
+Expected shortfall benchmark: -0.05899
 
 Risultato test :(RSI=10 periodi, SMA=10 periodi, stop_loss= -25%, take_profit=25%)
 
 Budget finale strategia = 298
 Volatilità strategia = 0.02513
-Sharpe Ratio strategia = 0.58199
-VaR strategia = -0.04256
+Sharpe Ratio strategia = 0.58179
+VaR strategia = -0.04000
 Max drawdown strategia: -0.42737
-Expected shortfall strategia: -0.06246
+Expected shortfall strategia: -0.05905
 
 Questi risultati mostrano come l'indice batta la strategia praticamente in tutto.
 
