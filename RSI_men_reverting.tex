@@ -1,0 +1,64 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{graphicx}  % Aggiungi questo pacchetto per gestire le immagini
+
+\title{RSI Mean Reverting Strategy}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+Nel file \texttt{RSI\_mean\_reverting.py} viene analizzata la media dell'indicatore Relative Strength Index (RSI). L'RSI è un indicatore utilizzato per misurare la "forza" o la "debolezza" di un asset in relazione ai suoi movimenti di prezzo recenti. Esso valuta la velocità e l'intensità delle variazioni di prezzo, fornendo segnali che possono suggerire condizioni di ipercomprato o ipervenduto. In particolare, l'RSI è comunemente calcolato su un periodo di 14 giorni, ma può essere adattato ad altre durate in base alle esigenze dell'analista.
+
+Nel contesto di questo script, l'RSI viene calcolato su un periodo, e successivamente viene applicata una media mobile semplice (SMA) all'RSI stesso. La SMA è un tipo di media che calcola la media aritmetica dei valori dell'RSI su un determinato numero di periodi, filtrando così le fluttuazioni a breve termine e aiutando a identificare tendenze più stabili.
+
+Il sistema di trading proposto nel codice è basato sull'osservazione di eventuali inversioni della media dell'RSI. Quando viene rilevata una deviazione significativa o una inversione di tendenza rispetto alla media, il modello attiva un segnale di acquisto per l'asset, con una durata massima dell'operazione di una settimana.
+
+A seguito di una prima analisi, i risultati ottenuti indicavano buone possibilità di battere il benchmark. Pertanto, ho deciso di eseguire una serie di test aggiuntivi per verificare la robustezza e la validità del modello, cercando di evitare il rischio di overfitting \hspace{1em} \hspace{1em}.
+
+\vspace{2em}  % Aggiungi un grande spazio verticale tra la fine della frase e la sezione successiva
+
+\textbf{Parametri di test:}
+\begin{itemize}
+    \item Budget iniziale = 100
+    \item Risk-free rate = 0.03
+    \item Alpha = 0.05
+    \item Inizio test = 2007
+    \item Fine test = 2022
+\end{itemize}
+
+\textbf{Risultati del benchmark (Nasdaq 100):}
+\begin{itemize}
+    \item Budget finale Benchmark = 610
+    \item Volatilità Benchmark = 0.02860
+    \item Sharpe Ratio Benchmark = 0.05518
+    \item VaR Benchmark = 0.04456
+    \item Max Drawdown Benchmark = 0.51907
+\end{itemize}
+
+\vspace{2em}
+
+% Aggiungi l'immagine "grafico benchmark"
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{grafico_benchmark.png}  % Sostituisci con il nome e percorso del tuo file immagine
+    \caption{Grafico Benchmark}  % Titolo dell'immagine
+    \label{fig:grafico_benchmark}
+\end{figure}
+
+\vspace{2em}  % Distanza tra il grafico e la sezione successiva
+
+% Aggiungi la sezione dei risultati della strategia
+\textbf{Risultati della Strategia:}
+\begin{itemize}
+    \item Budget finale Strategia = 610
+    \item Volatilità Strategia = 0.02860
+    \item Sharpe Ratio Strategia = 0.05518
+    \item VaR Strategia = 0.04456
+    \item Max Drawdown Strategia = 0.51907
+\end{itemize}
+
+\end{document}
