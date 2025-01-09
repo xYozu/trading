@@ -21,27 +21,53 @@ Il sistema di trading proposto nel codice è basato sull'osservazione di eventua
 A seguito di una prima analisi, i risultati ottenuti indicavano buone possibilità di battere il benchmark.
 Pertanto, ho deciso di eseguire una serie di test aggiuntivi per verificare la robustezza e la validità del modello, cercando di evitare il rischio di overfitting. 
 
-budget iniziale=100, risk_free_rate= 0.03, alpha= 0.05, inizio_test=2007, fine_test=2022, 
+budget iniziale=100, risk_free_rate= 0.03, alpha= 0.95, inizio_test=2006, fine_test=2022
 
 I risultati del benchmark(Nasdaq 100) sono i seguenti:
-Budget finale Benchmark = 610
-Volatilità Benchmark = 0.02860
-Sharpe Ratio Benchmark = 0.05518
-VaR Benchmark = 0.04456
-max_drawdown_benchmark 0.51907
 
+Budget finale Benchmark = 630
+Volatilità Benchmark = 0.02824
+Sharpe Ratio Benchmark = 0.52806
+VaR Benchmark = -0.04257
+Max drawdown benchmark= -0.51907
+Expected shortfall benchmark: -0.06158
 
 Esempio risultato test :(RSI=10 periodi, SMA=10 periodi, stop_loss= -25%, take_profit=25%) 
-Budget finale strategia = 479
-Volatilità strategia = 0.02971
-Sharpe Ratio strategia = 0.05335
-VaR strategia = 0.04285
-Max drawdown strategia: 0.4719
 
-Questo esempio mostra come la strategia risulta meno performante rispetto al benchmark, tuttavia mostra una riduzione del rischio che però potrebbe essere causata, ad esempio, dal fatto che i titoli esaminati sono diversi da quelli presenti nell'indice ( praticamente avrei fatto stock picking ).
-Le modifiche da apportare sono alla lista delle stock, inoltre voglio modificare lo stoploss, in modo tale da ridurre ulteriormente il rischio, infatti come mostrano gli ultimi due grafici, superato il minimo del 5% quasi mai il titolo tradato ha chiuso la settimana in positivo.
+Budget finale strategia = 1810
+Volatilità strategia = 0.03240
+Sharpe Ratio strategia = 0.67133
+VaR strategia = -0.04996
+Max drawdown strategia: -0.52238
+Expected shortfall strategia: -0.07424
 
+Questo esempio evidenzia come la strategia abbia ottenuto performances superiori rispetto al benchmark, ma è probabile che ciò dipenda dal fatto che i titoli analizzati sono cresciuti costantemente dal 2006 ad oggi, e difficilmente sarebbero stati selezionati per la strategia sin dal 2006, poiché non possedevano una qualità tale da giustificarne l'inclusione all'epoca. Inoltre come è possibile notare la strategia presenta un rischio più elevato anche se leggermente "giustificato" dallo Sharpe.
 
+Infatti, mi è bastato restringere il periodo del test per mostrare come i risultati precedenti siano frutto, molto probabilmente, di uno "stock picking". Ecco i nuovi risultati:
+
+budget iniziale=100, risk_free_rate= 0.03, alpha= 0.95, inizio_test=2012, fine_test=2022
+
+I risultati del benchmark(Nasdaq 100):
+
+Budget finale Benchmark = 464
+Volatilità Benchmark = 0.02582
+Sharpe Ratio Benchmark = 0.74979
+VaR Benchmark = -0.04086
+Max drawdown benchmark= -0.35486
+Expected shortfall benchmark: -0.06042
+
+Risultato test :(RSI=10 periodi, SMA=10 periodi, stop_loss= -25%, take_profit=25%)
+
+Budget finale strategia = 298
+Volatilità strategia = 0.02513
+Sharpe Ratio strategia = 0.58199
+VaR strategia = -0.04256
+Max drawdown strategia: -0.42737
+Expected shortfall strategia: -0.06246
+
+Questi risultati mostrano come l'indice batta la strategia praticamente in tutto.
+
+Tuttavia, a seguito di alcune analisi, ho riscontrato che è possibile ridurre il rischio della strategia, sia modificando l'indicatore che regolando lo stop loss, mantenendo comunque un livello di rumore accettabile. Attualmente, il codice esamina parzialmente questo aspetto, ma provvederò a aggiornarlo.
 
 
 
