@@ -9,7 +9,7 @@ from collections import defaultdict
 import seaborn as sns
 from scipy.stats import pearsonr
 
-#creo le liste che alla fine del progrmamma mi serviranno per contenere i dati da stampare e rappresentare
+#creo le liste che alla fine del programma mi serviranno per contenere i dati da stampare e rappresentare
 lista_date= []
 lista_trade=[]
 lista_budget_1=[]
@@ -23,7 +23,7 @@ numero_di_trade_effettuati=0
 #parametri dei test
 budget=100
 
-data_inizio_test="2007-01-01"
+data_inizio_test="2012-01-01"
 data_fine_test="2022-12-31"
 intervallo="1wk"
 
@@ -34,16 +34,17 @@ take_profit= 0.25
 # creo una lista contenente i ticker di alcune delle migliori aziende
 tickers = [ 
     #americane
-    'NVDA',  
-    'AAPL','GOOGL','AMZN', 'KO','BAC','MSFT', 'T','F','PFE', 'JPM', 'GE', 'WFC', 'VZ', 'MRK', 'HD', 'PYPL', 'LLY',
-    #'TSLA' ,
-    'NFLX','JNJ', 'PG','V', 'MA','PEP', 'DIS', 'MCD', 'INTC',  'XOM','CVX', 'MMM','CSCO','IBM','WMT', 'ORCL','ADBE','TXN', 'COST', 'TGT', 'MDT', 'LMT','AVGO', 'AMD', 'CRM',
+    'NVDA', 'AAPL', 'GOOGL', 'AMZN', 'KO', 'BAC', 'MSFT', 'T',  'F', 'PFE', 'JPM',  'WFC', 'HD', 'LLY', 'PG', 'MA', 'DIS', 'INTC', 'XOM',
+    'CVX', 'MMM','CSCO','IBM','WMT', 'ORCL','ADBE','TXN', 'COST', 'TGT', 'MDT', 'LMT','AVGO', 'AMD', 'CRM', 'PYPL', 'TSLA', 'NFLX', 'V',
     'INTU', 'AMAT','MSCI', 'TMO','GILD', 'UNH', 'CI', 'ELV', 'ISRG','ABT', 'CME', 'SCHW', 'BKNG', 'SPGI','MO', 'PM', 'SBUX', 'UPS','HON', 'RTX', 'DE', 'NKE', 'LOW',
     #europee 
-    'CRH', 'ROG', 'DGE', 'NOV', 'DCC','SAP', 'BA', 'AZN', 'RMS', 'SAN',  
-
+    #'CRH', 'ROG', 'DGE', 'NOV', 'DCC','SAP', 'BA', 'AZN', 'RMS', 'SAN',  
+    #peggiorano il risultato
+    'GE', 'VZ', 'MRK', 'JNJ', 'PEP', 'MCD',
 ]
+
 # con un ciclo prendo i dataset dei prezzi dei vari titoli durante un range temporale
+
 for ticker in tickers:
 
     print(f"Ticker:{ticker}") 
@@ -64,8 +65,7 @@ for ticker in tickers:
     
 
 
-# Optionally, save to a CSV file
-    df.to_csv(f"{ticker}_rviscreener.csv")# creo un csv del dataset del ticker
+    #df.to_csv(f"{ticker}_rviscreener.csv")# creo un csv del dataset del ticker
     
     for i in range(1, len(df)):# faccio un ciclo che iteri non più sui vari ticker ma sul dataset del ticker corrente
         if i==len(df)-4:#mi assicuro di non andare outofbonds
@@ -123,15 +123,7 @@ for ticker in tickers:
 
     #volumi
         volume=df['Volume'].iloc[i]# il volume è la quantità di azioni scambiate
-        volume_precedente = df['Volume'].iloc[i-1]
-        volume_2 = df['Volume'].iloc[i-2]
-        volume_3 = df['Volume'].iloc[i-3]
         
-
-        volume_successivo = df['Volume'].iloc[i+1]
-        volume_2_successivo = df['Volume'].iloc[i+2]
-        volume_3_successivo = df['Volume'].iloc[i+3]
-
         if sma_attuale>sma_precedente and sma_2_volte_prima>sma_precedente:#controllo cosa succede quando ho una inversione della media dello RSI
                
             data=df.index[i].date()
@@ -183,17 +175,8 @@ for ticker in tickers:
             #volumi
             print("-" * 100)
             print(" ")
-            print(f"VOLUME DI ACQUISTO: {volume}")
-            print(f"VOLUMI PRE-TRADE##############################")
-            print(f"volume_GIORNO PRIMA: {volume_precedente}, variazione: {(volume_precedente-volume)/volume*100}%")
-            print(f"volume_2: {volume_2}")
-            print(f"volume_3: {volume_3}")
-                
-            print(f"VOLUMI POST-TRADE ############################")
-            print(f"volume_GIORNO DOPO: {volume_successivo}, variazione: {(volume_successivo-volume)/volume*100}%")
-            print(f"volume_2 giorni dopo: {volume_2_successivo} ")
-            print(f"volume_3 giorni dopo: {volume_3_successivo} ")
-                
+            print(f"VOLUME: {volume}")
+              
             print("-" * 100)
             print(" ")
 
@@ -281,7 +264,7 @@ def grafico_benchmark(budget=100, ticker="^NDX", inizio=data_inizio_test, fine=d
     
     benchmark['Rendimento'] = benchmark['Adj Close'].pct_change()  # Calcolo il rendimento 
     benchmark['Budget'] = budget * (1 + benchmark['Rendimento']).cumprod()
-    #benchmark.to_csv(f"controllo_dati_funzione_benchmark.csv")
+    benchmark.to_csv(f"controllo_dati_funzione_benchmark.csv")
     
     lista_rendimenti_in_centesimi=benchmark['Rendimento'].dropna().tolist()
 
@@ -296,6 +279,7 @@ def grafico_benchmark(budget=100, ticker="^NDX", inizio=data_inizio_test, fine=d
 
     return lista_rendimenti_in_centesimi
 
+plt.figure(figsize=(12, 6))
 plt.plot(valori_finali, label='MY_STRATEGY', color='r')      
 plt.title(f"Andamento budget")
 plt.xlabel("numero di trade")
@@ -336,7 +320,7 @@ def mostra_correlazione(dati):#mi serviva per vedere se vi era una correlazione 
 
 mostra_correlazione(lista_trade_ordinati)
 
-def risk_calculator(returns_1, returns_2, risk_free_rate=0.03, alpha=0.05):# calcolo il rischio storico della strategia e del benchmrk per compararli
+def risk_calculator(returns_1, returns_2, risk_free_rate=0.03, alpha=0.95):# calcolo il rischio storico della strategia e del benchmrk per compararli
     
     def volatility(returns):
 
@@ -356,10 +340,19 @@ def risk_calculator(returns_1, returns_2, risk_free_rate=0.03, alpha=0.05):# cal
         return sharpe
 
     def value_at_risk(returns, alpha):
-
+        
         value_at_risk= -np.percentile(returns, 100 * alpha)
 
         return value_at_risk
+    
+    def expected_shortfall(returns, alpha):
+        
+        rendimenti_ordinati=np.sort(returns)
+        VaR=-np.percentile(rendimenti_ordinati, alpha * 100)
+        rendimenti_inferiori_var= rendimenti_ordinati[rendimenti_ordinati <= VaR]
+        es= np.mean(rendimenti_inferiori_var)
+
+        return es
 
     def max_drawdown(rendimenti):
         
@@ -380,7 +373,7 @@ def risk_calculator(returns_1, returns_2, risk_free_rate=0.03, alpha=0.05):# cal
             drawdown = (peak - valore) / peak  # calcolo del drawdown
             max_dd = max(max_dd, drawdown)  # aggiorno il massimo drawdown se necessario
     
-        return max_dd # ritorniamo il max drawdown 
+        return -max_dd # ritorniamo il max drawdown 
 
     volatility_1=volatility(returns_1)
     volatility_2=volatility(returns_2)
@@ -390,6 +383,8 @@ def risk_calculator(returns_1, returns_2, risk_free_rate=0.03, alpha=0.05):# cal
     VaR_strategy=value_at_risk(returns_2, alpha)
     max_drawdown_benchmark=max_drawdown(returns_1)
     max_drawdown_strategia=max_drawdown(returns_2)
+    expected_shortfall_benchmark=expected_shortfall(returns_1, alpha)
+    expected_shortfall_strategia=expected_shortfall(returns_2, alpha)
 
     risultati_rischio={ 'volatilità_benchmark':volatility_1,
                         'volatilità_strategia':volatility_2, 
@@ -398,7 +393,11 @@ def risk_calculator(returns_1, returns_2, risk_free_rate=0.03, alpha=0.05):# cal
                         'VaR_benchmark':VaR_benchmark, 
                         'VaR_strategy':VaR_strategy,
                         'max_drawdown_benchmark': max_drawdown_benchmark,
-                        'max_drawdown_strategia': max_drawdown_strategia
+                        'max_drawdown_strategia': max_drawdown_strategia,
+                        'expected_shortfall_benchmark': expected_shortfall_benchmark,
+                        'expected_shortfall_strategia': expected_shortfall_strategia,
+
+
 
                         }
 
@@ -415,21 +414,51 @@ print(f"risultati analisi del rischio {risultati_rischio} ")
 
 #analizzo i drawdown massimi ottenuti durante l'esposizione
 #fail
-plt.plot(lista_differenze_fail, marker='x', color='b')
-plt.axhline(y=-0.05, color='r', linestyle='--', label='y = -5')    
-plt.title(f"drawdown subito e trade perso")
+plt.figure(figsize=(14, 8))
+plt.scatter(lista_differenze_fail, list(range(len(lista_differenze_fail))), marker='x', color='b') 
+plt.title(f"minimi raggiunti e trade persi")
 plt.xlabel("trade")
-plt.ylabel("Percentuale drawdown")
+plt.ylabel("Percentuale minimo")
 plt.grid(False)
 plt.show()
 #gain
-plt.plot(lista_differenze_gain, marker='x', color='g')
-plt.axhline(y=-0.05, color='r', linestyle='--', label='y = -5')
-plt.axhline(y=-0.07, color='r', linestyle='--', label='y = -7')    
-plt.title(f"drawdown subito e trade vinto")
+plt.figure(figsize=(14, 8))
+plt.scatter(lista_differenze_gain, list(range(len(lista_differenze_gain))), marker='x', color='g')
+plt.title(f"minimi raggiunti e trade vinti")
 plt.xlabel("trade")
-plt.ylabel("Percentuale drawdown")
+plt.ylabel("Percentuale minimo")
 plt.grid(False)
 plt.show()
 
-#come è possibile notare superato il 5% di loss quasi mai il titolo ha chiuso successivmente in positivo, potrebbe essere un buon segnale di stoploss
+#come è possibile notare superato il 5% di loss quasi mai il titolo ha chiuso successivmente in positivo, potrebbe essere un buon segnale di stoploss, analizzo quale potrebbe essere un buon stoploss
+
+def good_stoploss(gain, fail):
+    
+    
+    mean_gain, std_gain = np.mean(gain), np.std(gain)
+    mean_fail, std_fail = np.mean(fail), np.std(fail)
+
+    # Usa np.linspace per creare l'intervallo di x
+    x1 = np.linspace(min(gain), max(gain), len(gain))
+    x2 = np.linspace(min(fail), max(fail), len(fail))
+    # Calcola la distribuzione normale per ciascuna lista
+    y1 = (1/(std_gain * np.sqrt(2 * np.pi))) * np.exp(-0.5 * ((x1 - mean_gain) / std_gain)**2)
+    y2 = (1/(std_fail * np.sqrt(2 * np.pi))) * np.exp(-0.5 * ((x2 - mean_fail) / std_fail)**2)
+
+    # Visualizza il grafico delle distribuzioni
+    plt.figure(figsize=(14, 8))
+    plt.plot(x1, y1, label="Distribuzione dei minimi dei trade conclusi in profitto", color="blue")
+    plt.axvline(x=mean_gain, color='blue',linewidth=1)
+    plt.plot(x2, y2, label="Distribuzione dei minimi dei trade conclusi in perdita", color="red")
+    plt.axvline(x=mean_fail, color='red',linewidth=1)
+    plt.title("Distribuzione")
+    plt.xlabel("Valori")
+    plt.ylabel("Densità di Probabilità")
+    plt.legend()
+    plt.show()
+
+    return mean_gain-std_gain
+
+stoploss_possibile=good_stoploss(lista_differenze_gain, lista_differenze_fail)
+print(f"possibile stoploss {stoploss_possibile}")
+
