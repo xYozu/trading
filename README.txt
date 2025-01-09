@@ -70,7 +70,7 @@ Expected shortfall strategia: -0.06246
 Questi risultati mostrano come l'indice batta la strategia praticamente in tutto.
 
 Tuttavia, a seguito di alcune analisi, ho riscontrato che è possibile ridurre il rischio della strategia, sia modificando l'indicatore 
-che regolando lo stop loss, mantenendo comunque un livello di rumore accettabile.
+che regolando lo stoploss, mantenendo comunque un livello di rumore accettabile.
 Attualmente, il codice esamina parzialmente questo aspetto, ma provvederò a aggiornarlo.
 
 
