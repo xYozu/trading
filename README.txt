@@ -41,7 +41,9 @@ VaR strategia = -0.04996
 Max drawdown strategia: -0.52238
 Expected shortfall strategia: -0.07424
 
-Questo esempio evidenzia come la strategia abbia ottenuto performances superiori rispetto al benchmark, ma è probabile che ciò dipenda dal fatto che i titoli analizzati sono cresciuti costantemente dal 2006 ad oggi, e difficilmente sarebbero stati selezionati per la strategia sin dal 2006, poiché non possedevano una qualità tale da giustificarne l'inclusione all'epoca. Inoltre come è possibile notare la strategia presenta un rischio più elevato anche se leggermente "giustificato" dallo Sharpe.
+Questo esempio evidenzia come la strategia abbia ottenuto performances superiori rispetto al benchmark, ma è probabile che ciò dipenda dal fatto che i titoli analizzati 
+sono cresciuti costantemente dal 2006 ad oggi, e difficilmente sarebbero stati selezionati per la strategia sin dal 2006, poiché non possedevano una qualità tale da
+giustificarne l'inclusione all'epoca. Inoltre come è possibile notare la strategia presenta un rischio più elevato anche se leggermente "giustificato" dallo Sharpe.
 
 Infatti, mi è bastato restringere il periodo del test per mostrare come i risultati precedenti siano frutto, molto probabilmente, di uno "stock picking". Ecco i nuovi risultati:
 
