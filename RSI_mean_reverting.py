@@ -23,12 +23,12 @@ numero_di_trade_effettuati=0
 #parametri dei test
 budget=100
 
-data_inizio_test="2012-01-01"
-data_fine_test="2022-12-31"
+data_inizio_test="2014-01-01"
+data_fine_test="2024-12-31"
 intervallo="1wk"
 
 periodo= 10
-stop_loss= -0.25
+stop_loss=  -0.25
 take_profit= 0.25
 
 # creo una lista contenente i ticker di alcune delle migliori aziende
@@ -320,7 +320,7 @@ def mostra_correlazione(dati):#mi serviva per vedere se vi era una correlazione 
 
 mostra_correlazione(lista_trade_ordinati)
 
-def risk_calculator(returns_1, returns_2, risk_free_rate=0.03, alpha=0.95):# calcolo il rischio storico della strategia e del benchmrk per compararli
+def risk_calculator(returns_1, returns_2, risk_free_rate=0.03, alpha=0.05):# calcolo il rischio storico della strategia e del benchmrk per compararli
     
     def volatility(returns):
 
@@ -341,16 +341,21 @@ def risk_calculator(returns_1, returns_2, risk_free_rate=0.03, alpha=0.95):# cal
 
     def value_at_risk(returns, alpha):
         
-        value_at_risk= -np.percentile(returns, 100 * alpha)
+        rendimenti_ordinati = np.sort(returns)
+        indice = int(alpha * len(rendimenti_ordinati))
+        var = rendimenti_ordinati[indice]
 
-        return value_at_risk
+        return var
     
     def expected_shortfall(returns, alpha):
         
-        rendimenti_ordinati=np.sort(returns)
-        VaR=-np.percentile(rendimenti_ordinati, alpha * 100)
-        rendimenti_inferiori_var= rendimenti_ordinati[rendimenti_ordinati <= VaR]
-        es= np.mean(rendimenti_inferiori_var)
+        # Ordinare i rendimenti
+        rendimenti_ordinati = np.sort(returns)
+    
+    
+        indice_var = int(alpha * len(rendimenti_ordinati))
+        rendimenti_peggiori = rendimenti_ordinati[:indice_var]
+        es = np.mean(rendimenti_peggiori)
 
         return es
 
@@ -417,20 +422,20 @@ print(f"risultati analisi del rischio {risultati_rischio} ")
 plt.figure(figsize=(14, 8))
 plt.scatter(lista_differenze_fail, list(range(len(lista_differenze_fail))), marker='x', color='b') 
 plt.title(f"minimi raggiunti e trade persi")
-plt.xlabel("trade")
-plt.ylabel("Percentuale minimo")
+plt.xlabel("Percentuale minimo")
+plt.ylabel("trade")
 plt.grid(False)
 plt.show()
 #gain
 plt.figure(figsize=(14, 8))
 plt.scatter(lista_differenze_gain, list(range(len(lista_differenze_gain))), marker='x', color='g')
 plt.title(f"minimi raggiunti e trade vinti")
-plt.xlabel("trade")
-plt.ylabel("Percentuale minimo")
+plt.xlabel("Percentuale minimo")
+plt.ylabel("trade")
 plt.grid(False)
 plt.show()
 
-#come è possibile notare superato il 5% di loss quasi mai il titolo ha chiuso successivmente in positivo, potrebbe essere un buon segnale di stoploss, analizzo quale potrebbe essere un buon stoploss
+#come è possibile notare superato il -5% di loss quasi mai il titolo ha chiuso successivmente in positivo, potrebbe essere un buon segnale di stoploss, analizzo quale potrebbe essere un buon stoploss
 
 def good_stoploss(gain, fail):
     
@@ -461,4 +466,5 @@ def good_stoploss(gain, fail):
 
 stoploss_possibile=good_stoploss(lista_differenze_gain, lista_differenze_fail)
 print(f"possibile stoploss {stoploss_possibile}")
+
 
