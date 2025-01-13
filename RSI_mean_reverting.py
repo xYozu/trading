@@ -61,7 +61,7 @@ for ticker in tickers:
     df['RVI_2'] = ta.rvi(df['Adj Close'], length=2, ma_length=2)#calcolo l'rvi di diversi periodi
     df['RVI_7'] = ta.rvi(df['Adj Close'], length=7, ma_length=7)
     df['RVI_14'] = ta.rvi(df['Adj Close'], length=14, ma_length=14)
-    df['Monthly_returns'] = df['Close'].pct_change()
+    
     
 
 
